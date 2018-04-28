@@ -26,10 +26,12 @@ public class BookData {
         for (int i = 0; i < books.size(); i++) {
 
             int id = i+1;
-
             System.out.println(id + ". " + books.get(i));
         }
         System.out.println("");
     }
 
+    public List<Book> getAllBooks() {
+        return books;
+    }
 }

@@ -69,6 +69,6 @@ public class Book {
 
     @Override
     public String toString() {
-        return "'" + title + "'" + " ISBN: " + isbn + " YEAR: " + year;
+        return title + "'" + " ISBN: " + isbn + " YEAR: " + year;
     }
 }

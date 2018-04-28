@@ -1,7 +1,9 @@
 package bookstore;
 
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class BookstoreApp {
 
@@ -11,7 +13,7 @@ public class BookstoreApp {
         printMenu();
 
         int userInput = getPlayerInput(scanner);
-        while (userInput == 1 || userInput == 2) {
+        while (userInput >= 1 && userInput <= 3) {
             switch (userInput) {
                 case 1:
                     System.out.println("Email: bookstore@gmail.com\n");
@@ -20,6 +22,23 @@ public class BookstoreApp {
                     break;
                 case 2:
                     BookData.getInstance().printBooks();
+                    printMenu();
+                    userInput = getPlayerInput(scanner);
+                    break;
+                case 3:
+                    List<Book> bookList = BookData.getInstance().getAllBooks()
+                            .stream()
+                            .filter(year -> year.getYear() < 2000)
+                            .collect(Collectors.toList());
+                    if (bookList.isEmpty()){
+                        System.out.println("No books with these parameters\n");
+                    } else {
+                        for (int i = 0; i < bookList.size(); i++){
+                            int id = i+1;
+                            System.out.println(id + ". " + bookList.get(i));
+                        }
+                        System.out.println("");
+                    }
                     printMenu();
                     userInput = getPlayerInput(scanner);
                     break;
@@ -33,7 +52,8 @@ public class BookstoreApp {
         System.out.println("What would you like to do?");
         System.out.println("1. Show contact");
         System.out.println("2. Show available books");
-        System.out.println("3. End application");
+        System.out.println("3. Show books published before 2000");
+        System.out.println("4. End application");
     }
 
     private static int getPlayerInput(Scanner scanner) {
@@ -43,7 +63,7 @@ public class BookstoreApp {
             try {
                 correctInput = true;
                 number = scanner.nextInt();
-                while (number < 1 || number > 3) {
+                while (number < 1 || number > 4) {
                     System.out.println("Bad argument. Try again.");
                     number = scanner.nextInt();
                 }
