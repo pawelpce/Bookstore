@@ -1,5 +1,6 @@
 package bookstore;
 
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
@@ -26,16 +27,27 @@ public class BookstoreApp {
                     userInput = getPlayerInput(scanner);
                     break;
                 case 3:
-                    List<Book> bookList = BookData.getInstance().getAllBooks()
+                    /*List<Book> bookList = BookData.getInstance().getAllBooks()
                             .stream()
-                            .filter(year -> year.getYear() < 2000)
-                            .collect(Collectors.toList());
-                    if (bookList.isEmpty()){
+                            .filter(year -> year.getYear() < 2010)
+                            .collect(Collectors.toList());*/
+
+                    List<Book> bookList = BookData.getInstance().getAllBooks();
+                    List<Book> filteredBookList = new ArrayList<>();
+
+                    for (int i = 0; i < bookList.size(); i++){
+
+                        if (bookList.get(i).getYear() < 2000){
+                            filteredBookList.add(bookList.get(i));
+                        }
+                    }
+
+                    if (filteredBookList.isEmpty()){
                         System.out.println("No books with these parameters\n");
                     } else {
-                        for (int i = 0; i < bookList.size(); i++){
+                        for (int i = 0; i < filteredBookList.size(); i++){
                             int id = i+1;
-                            System.out.println(id + ". " + bookList.get(i));
+                            System.out.println(id + ". " + filteredBookList.get(i));
                         }
                         System.out.println("");
                     }
