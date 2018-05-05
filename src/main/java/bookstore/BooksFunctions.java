@@ -163,21 +163,24 @@ public class BooksFunctions {
         return books;
     }
 
+    public List<Book> booksPublishedAfter2003() {
 
-    public static void main(String[] args) {
+        List<Book> filteredList = books.stream()
+                .filter(book -> book.getYear() > 2003)
+                .collect(Collectors.toList());
 
-        List<Book> secondList = Book.importBooks();
+        return filteredList;
 
-        for (int i = 0; i < secondList.size(); i++) {
+    }
 
-            if (secondList.get(i).getYear() == Book.importBooks().get(i).getYear()) {
-                System.out.println(true);
-            } else {
-                System.out.println(false);
-            }
 
+    public void printModifiedList(List<Book> modifiedList) {
+
+        for (int i = 0; i < modifiedList.size(); i++) {
+            int id = i+1;
+            System.out.println(id + ". " + modifiedList.get(i));
         }
-
+        System.out.println("");
     }
 
 }
