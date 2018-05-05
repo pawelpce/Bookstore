@@ -9,11 +9,11 @@ import java.util.List;
 public class Book {
 
     private String title;
-    private int isbn;
+    private String isbn;
     private int year;
 
 
-    public Book(String title, int isbn, int year) {
+    public Book(String title, String isbn, int year) {
         this.title = title;
         this.isbn = isbn;
         this.year = year;
@@ -39,7 +39,7 @@ public class Book {
     }
 
     private static Book createBook(String[] attributes) {
-        return new Book(attributes[0], Integer.parseInt(attributes[1]), Integer.parseInt(attributes[2]));
+        return new Book(attributes[0], attributes[1], Integer.parseInt(attributes[2]));
     }
 
 
@@ -47,7 +47,7 @@ public class Book {
         return title;
     }
 
-    public int getIsbn() {
+    public String getIsbn() {
         return isbn;
     }
 
@@ -59,7 +59,7 @@ public class Book {
         this.title = title;
     }
 
-    public void setIsbn(int isbn) {
+    public void setIsbn(String isbn) {
         this.isbn = isbn;
     }
 
@@ -69,6 +69,6 @@ public class Book {
 
     @Override
     public String toString() {
-        return title + "'" + " ISBN: " + isbn + " YEAR: " + year;
+        return "'" + title + "'" + " ISBN: " + isbn + " YEAR: " + year;
     }
 }
