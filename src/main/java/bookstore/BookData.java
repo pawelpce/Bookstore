@@ -2,12 +2,10 @@ package bookstore;
 
 import java.util.List;
 
-import static bookstore.Book.importBooks;
-
 public class BookData {
 
     private static BookData bookData = null;
-    private List<Book> books = importBooks();
+    private List<Book> bookList = ImportData.getInstance().importBooks();
 
     private BookData(){
 
@@ -21,17 +19,12 @@ public class BookData {
         return bookData;
     }
 
-    public void printBooks() {
-
-        for (int i = 0; i < books.size(); i++) {
-
-            int id = i+1;
-            System.out.println(id + ". " + books.get(i));
-        }
-        System.out.println("");
-    }
 
     public List<Book> getAllBooks() {
-        return books;
+        return bookList;
+    }
+
+    public void setBooks(List<Book> bookList) {
+        this.bookList = bookList;
     }
 }

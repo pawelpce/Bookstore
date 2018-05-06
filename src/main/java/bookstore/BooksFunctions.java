@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 
 public class BooksFunctions {
 
-    private List<Book> books = Book.importBooks();
+    private List<Book> books = BookData.getInstance().getAllBooks();
 
     public Book getBookByIsbn(String isbn) {
 
@@ -174,13 +174,39 @@ public class BooksFunctions {
     }
 
 
-    public void printModifiedList(List<Book> modifiedList) {
+    public void printModifiedList(List<Book> modifiedList, int userToStringFormat) {
 
-        for (int i = 0; i < modifiedList.size(); i++) {
-            int id = i+1;
-            System.out.println(id + ". " + modifiedList.get(i));
+        if (userToStringFormat == 0) {
+            for (int i = 0; i < modifiedList.size(); i++) {
+                int id = i + 1;
+                System.out.println(id + ". " + modifiedList.get(i));
+            }
+            System.out.println("");
+        } else if (userToStringFormat == 1) {
+            for (int i = 0; i < modifiedList.size(); i++) {
+                int id = i + 1;
+                System.out.println(id + ". YEAR: " + modifiedList.get(i).getYear()
+                                    + " '" + modifiedList.get(i).getTitle() +
+                                     "' ISBN: " + modifiedList.get(i).getIsbn());
+            }
+            System.out.println("");
+        } else if (userToStringFormat == 2) {
+            for (int i = 0; i < modifiedList.size(); i++) {
+                int id = i + 1;
+                System.out.println(id + ". '" + modifiedList.get(i).getTitle()
+                        + "' YEAR: " + modifiedList.get(i).getYear() +
+                        " ISBN: " + modifiedList.get(i).getIsbn());
+            }
+            System.out.println("");
+        } else {
+            for (int i = 0; i < modifiedList.size(); i++) {
+                int id = i + 1;
+                System.out.println(id + ". ISBN: " + modifiedList.get(i).getIsbn()
+                        + " '" + modifiedList.get(i).getTitle() +
+                        "' YEAR: " + modifiedList.get(i).getYear());
+            }
+            System.out.println("");
         }
-        System.out.println("");
     }
 
 }

@@ -1,9 +1,5 @@
 package bookstore;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Book {
@@ -11,35 +7,18 @@ public class Book {
     private String title;
     private String isbn;
     private int year;
+    private String kindOfCover;
+    private List<Author> authorList;
+    private Category category;
 
 
-    public Book(String title, String isbn, int year) {
+    public Book(String title, String isbn, int year, String kindOfCover, List<Author> authorList, Category category) {
         this.title = title;
         this.isbn = isbn;
         this.year = year;
-    }
-
-    public static List<Book> importBooks() {
-        BufferedReader br;
-        List<Book> books = new ArrayList<>();
-        try {
-            br = new BufferedReader(new InputStreamReader(
-                    ClassLoader.getSystemResourceAsStream("books.csv")));
-            String line = br.readLine();
-            while (line != null) {
-                String[] attributes = line.split(";");
-                Book book = createBook(attributes);
-                books.add(book);
-                line = br.readLine();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return books;
-    }
-
-    private static Book createBook(String[] attributes) {
-        return new Book(attributes[0], attributes[1], Integer.parseInt(attributes[2]));
+        this.kindOfCover = kindOfCover;
+        this.authorList = authorList;
+        this.category = category;
     }
 
 
@@ -67,8 +46,36 @@ public class Book {
         this.year = year;
     }
 
+    public List<Author> getAuthorList() {
+        return authorList;
+    }
+
+    public void setAuthorList(List<Author> authorList) {
+        this.authorList = authorList;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public String getKindOfCover() {
+        return kindOfCover;
+    }
+
+    public void setKindOfCover(String kindOfCover) {
+        this.kindOfCover = kindOfCover;
+    }
+
     @Override
     public String toString() {
-        return "'" + title + "'" + " ISBN: " + isbn + " YEAR: " + year;
+        return "'" + title + "' ISBN: " + isbn +
+                " YEAR: " + year +
+                " AUTHOR: " + authorList +
+                " COVER: " + kindOfCover +
+                " CATEGORY: " + category;
     }
 }

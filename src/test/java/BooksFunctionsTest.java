@@ -15,14 +15,14 @@ public class BooksFunctionsTest {
     private List<Book> books = new ArrayList<>();
 
     @Before
-    public void init() {
+/*    public void init() {
         books.add(new Book("Clean Code", "0132350882", 2008));
         books.add(new Book("Effective Java (3rd Edition)", "0134685997", 2018));
         books.add(new Book("Test Driven Development", "0321146530", 2003));
         books.add(new Book("Patterns of Enterprise Application Architecture", "0321127420", 2002));
         books.add(new Book("Head First Design Patterns", "0596007124", 2004));
         books.add(new Book("Clean Architecture", "0134494164", 2017));
-    }
+    }*/
 
     @Test
     public void getBookByIsbn() {
