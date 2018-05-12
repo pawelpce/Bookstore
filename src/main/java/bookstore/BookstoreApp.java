@@ -20,7 +20,7 @@ public class BookstoreApp {
         int userInput = getPlayerInput(scanner);
         int userToStringFormat;
 
-        while (userInput >= 1 && userInput <= 21) {
+        while (userInput >= 1 && userInput <= 24) {
             switch (userInput) {
                 case 1:
                     System.out.println("Email: bookstore@gmail.com\n");
@@ -111,13 +111,7 @@ public class BookstoreApp {
                     userInput = getPlayerInput(scanner);
                     break;
                 case 10:
-                    System.out.println("Set new author's name and surname:");
-                    String newAuthorName = scanner1.nextLine();
-                    System.out.println("Set new author's age:");
-                    int newAuthorAge = scanner.nextInt();
-                    Author newAuthor = new Author(authorsList.size() + 1, newAuthorName, newAuthorAge);
-                    authorsList.add(newAuthor);
-                    System.out.println("New author added.\n");
+                    AuthorFunctions.addNewAuthor(scanner, scanner1, authorsList);
                     printMenu();
                     userInput = getPlayerInput(scanner);
                     break;
@@ -193,13 +187,7 @@ public class BookstoreApp {
                     userInput = getPlayerInput(scanner);
                     break;
                 case 18:
-                    System.out.println("Set new category's name:");
-                    String newCategorysName = scanner1.nextLine();
-                    System.out.println("Set new category's priority (numbers 1-3):");
-                    int newCategorysPriority = scanner.nextInt();
-                    Category newCategory = new Category(categoryList.size() + 1, newCategorysName, newCategorysPriority);
-                    categoryList.add(newCategory);
-                    System.out.println("New category added.\n");
+                    CategoryFunctions.addNewCategory(scanner, scanner1, categoryList);
                     printMenu();
                     userInput = getPlayerInput(scanner);
                     break;
@@ -236,7 +224,113 @@ public class BookstoreApp {
                     ExportData.getInstance().saveAuthorsToFile(authorsList);
                     ExportData.getInstance().saveBooksToFile(bookList);
                     ExportData.getInstance().saveCategoriesToFile(categoryList);
-                    System.out.println("All changes have been saved to file\n");
+                    System.out.println("All changes have been saved to files\n");
+                    printMenu();
+                    userInput = getPlayerInput(scanner);
+                    break;
+                case 22:
+                    System.out.println("Set new book's title:");
+                    String newBookTitle = scanner1.nextLine();
+                    System.out.println("ISBN:");
+                    String newBookIsbn = scanner1.nextLine();
+                    System.out.println("Year:");
+                    int newBookYear = scanner.nextInt();
+                    System.out.println("Kind of cover - M for soft, T for hard:");
+                    String newBookCover = scanner1.nextLine();
+
+                    System.out.println("Type the id of existing author or 0 to add new.");
+                    authorsList.stream().forEach(author -> System.out.println(author.getId() + ". " + author));
+                    System.out.println("");
+
+                    int authorId = scanner.nextInt();
+                    List<Author> newBookAuthors = new ArrayList<>();
+                    int newAuthorId;
+                    Author newAuthor;
+                    while (authorId != -1) {
+                        if (authorId == 0) {
+                            newAuthorId = AuthorFunctions.addNewAuthor(scanner, scanner1, authorsList);
+                            newAuthor = AuthorFunctions.getAuthorById(newAuthorId);
+                            newBookAuthors.add(newAuthor);
+                        } else {
+                            final int authorId2 = authorId;
+                            newAuthor = authorsList.stream().filter(author -> author.getId() == authorId2).findFirst().get();
+                            newBookAuthors.add(newAuthor);
+
+                            /*for (Author author : authorsList) {
+                                if (author.getId() == authorId) {
+                                    newBookAuthors.add(author);
+                                }
+                            }*/
+                        }
+                        System.out.println("New author added. If you would like to add next, type the id of existing author or 0 to add new or -1 to end adding.");
+                        authorId = scanner.nextInt();
+                    }
+
+                    System.out.println("Type the id of existing category or 0 to add new:");
+                    categoryList.stream().forEach(category -> System.out.println(category.getId() + ". " + category + " No. of books: " +
+                            CategoryFunctions.getCategoryNumberOfBooks(category)));
+                    System.out.println("");
+                    int categoryId = scanner.nextInt();
+                    int newCategoryId;
+                    Category newCategory;
+                    if (categoryId == 0) {
+                        newCategoryId = CategoryFunctions.addNewCategory(scanner, scanner1, categoryList);
+                        newCategory = CategoryFunctions.getCategoryById(newCategoryId);
+                    } else {
+                        newCategory = categoryList.stream().filter(category -> category.getId() == categoryId).findFirst().get();
+                    }
+
+                    Book newBook = new Book(newBookTitle, newBookIsbn, newBookYear, newBookCover, newBookAuthors, newCategory);
+                    bookList.add(newBook);
+                    System.out.println("New book added.\n");
+                    printMenu();
+                    userInput = getPlayerInput(scanner);
+                    break;
+                case 23:
+                    System.out.println("Type the title of book you would like to order\n");
+                    booksPrintStrategy.printAllBooks(bookList);
+                    String bookToOrder = scanner1.nextLine();
+                    Book newBookToOrder = bookList.stream().filter(book -> book.getTitle().equals(bookToOrder)).findAny().get();
+                    OrderSender orderSender;
+
+                    if (newBookToOrder.getKindOfCover().equals("M")){
+                        orderSender = new SoftCoverOrderSender();
+                    } else {
+                        orderSender = new HardCoverOrderSender();
+                    }
+
+                    orderSender.makeOrder(newBookToOrder.getTitle());
+
+                    printMenu();
+                    userInput = getPlayerInput(scanner);
+                    break;
+                case 24:
+                    System.out.println("What would you like to delete:");
+                    System.out.println("1. Author");
+                    System.out.println("2. Category");
+                    System.out.println("3. Book");
+                    System.out.println("4. Back");
+                    int userDeleteInput = scanner.nextInt();
+
+                    if (userDeleteInput == 1) {
+                        System.out.println("Type the id of the author you would like to delete:\n");
+                        authorsList.stream().forEach(author -> System.out.println(author.getId() + ". " + author + " No. of books: " +
+                                AuthorFunctions.getAuthorsNumberOfBooks(author)));
+                        System.out.println("");
+                        int authorToDelete = scanner.nextInt();
+                        AuthorFunctions.deleteAuthor(authorToDelete, authorsList);
+                    } else if (userDeleteInput == 2) {
+                        System.out.println("Type the id of the category you would like to delete:\n");
+                        categoryList.stream().forEach(category -> System.out.println(category.getId() + ". " + category));
+                        System.out.println("");
+                        int categoryToDelete = scanner.nextInt();
+                        CategoryFunctions.deleteCategory(categoryToDelete, categoryList);
+                    } else if (userDeleteInput == 3) {
+                        System.out.println("Type the title of book you would like to order\n");
+                        booksPrintStrategy.printAllBooks(bookList);
+                        String bookToDelete = scanner1.nextLine();
+                        BooksFunctions.deleteBook(bookToDelete, bookList);
+                    } else {}
                     printMenu();
                     userInput = getPlayerInput(scanner);
                     break;
@@ -276,7 +370,10 @@ public class BookstoreApp {
         System.out.println("19. Show all books from chosen category");
         System.out.println("20. Edit category name");
         System.out.println("21. Save all changes to file");
-        System.out.println("22. End application");
+        System.out.println("22. Add new book");
+        System.out.println("23. Make new order");
+        System.out.println("24. Delete book, author or category");
+        System.out.println("25. End application");
     }
 
     private static int getPlayerInput(Scanner scanner) {
@@ -286,7 +383,7 @@ public class BookstoreApp {
             try {
                 correctInput = true;
                 number = scanner.nextInt();
-                while (number < 1 || number > 22) {
+                while (number < 1 || number > 25) {
                     System.out.println("Bad argument. Try again.");
                     number = scanner.nextInt();
                 }

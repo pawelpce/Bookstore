@@ -2,6 +2,7 @@ package bookstore;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class AuthorFunctions {
 
@@ -48,6 +49,26 @@ public class AuthorFunctions {
             }
         }
         return authorsListOfBooks;
+
+    }
+
+    public static int addNewAuthor(Scanner scanner, Scanner scanner1, List<Author> authorsList) {
+        System.out.println("Set new author's name and surname:");
+        String newAuthorName = scanner1.nextLine();
+        System.out.println("Set new author's age:");
+        int newAuthorAge = scanner.nextInt();
+        Author newAuthor = new Author(authorsList.size() + 1, newAuthorName, newAuthorAge);
+        authorsList.add(newAuthor);
+        System.out.println("New author added.\n");
+
+        return newAuthor.getId();
+    }
+
+    public static void deleteAuthor(int id, List<Author> authorList) {
+
+        authorList.get(id-1).setName(null);
+        authorList.get(id-1).setAge(0);
+        System.out.println("Author is deleted.\n");
 
     }
 }
