@@ -1,5 +1,7 @@
 package bookstore;
 
+import com.sun.xml.internal.ws.api.pipe.FiberContextSwitchInterceptor;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -20,7 +22,7 @@ public class BookstoreApp {
         int userInput = getPlayerInput(scanner);
         int userToStringFormat;
 
-        while (userInput >= 1 && userInput <= 24) {
+        while (userInput >= 1 && userInput <= 25) {
             switch (userInput) {
                 case 1:
                     System.out.println("Email: bookstore@gmail.com\n");
@@ -97,7 +99,7 @@ public class BookstoreApp {
                     userInput = getPlayerInput(scanner);
                     break;
                 case 8:
-                    categoryList.stream().forEach(category -> System.out.println(category));
+                    categoryList.stream().forEach(System.out::println);
                     System.out.println("");
                     printMenu();
                     userInput = getPlayerInput(scanner);
@@ -105,7 +107,7 @@ public class BookstoreApp {
                 case 9:
                     List<Book> filteredBooks = bookList.stream()
                             .filter(book -> book.getCategory().getName().equals("Wzorce projektowe")).collect(Collectors.toList());
-                    filteredBooks.stream().forEach(book -> System.out.println(book));
+                    filteredBooks.stream().forEach(System.out::println);
                     System.out.println("");
                     printMenu();
                     userInput = getPlayerInput(scanner);
@@ -334,6 +336,26 @@ public class BookstoreApp {
                     printMenu();
                     userInput = getPlayerInput(scanner);
                     break;
+                case 25:
+                    List<Worker> workerList = new ArrayList<>();
+                    Worker worker = new Manager("Jan", "Kowalski", "jan.kowalski@onet.pl", 38, 797878989, 30);
+                    Worker worker1 = new Salesman("Marian","Wiśniewski", "marianwiśniewski@gmail.com", 25, 2300);
+                    Worker worker2 = new Intern("Katarzyna", "Majewska", "kasia_majewska@wp.pl", 19, 120);
+                    workerList.add(worker);
+                    workerList.add(worker1);
+                    workerList.add(worker2);
+
+                    System.out.println("You hired:");
+                    System.out.println(worker);
+                    System.out.println(worker1);
+                    System.out.println(worker2 + "\n");
+
+                    workerList.stream()
+                            .forEach(worker3 -> System.out.println(worker3.name + " " + worker3.surname + " montly wage: " + worker3.getMonthlyWage()));
+                    System.out.println("");
+                    printMenu();
+                    userInput = getPlayerInput(scanner);
+                    break;
             }
         }
         System.out.println("Thank you for using our application.");
@@ -373,7 +395,8 @@ public class BookstoreApp {
         System.out.println("22. Add new book");
         System.out.println("23. Make new order");
         System.out.println("24. Delete book, author or category");
-        System.out.println("25. End application");
+        System.out.println("25. Hire new employees");
+        System.out.println("26. End application");
     }
 
     private static int getPlayerInput(Scanner scanner) {
@@ -383,7 +406,7 @@ public class BookstoreApp {
             try {
                 correctInput = true;
                 number = scanner.nextInt();
-                while (number < 1 || number > 25) {
+                while (number < 1 || number > 26) {
                     System.out.println("Bad argument. Try again.");
                     number = scanner.nextInt();
                 }
