@@ -68,14 +68,14 @@ public class BooksFunctionsTest {
     @Test
     public void getTheLatestBook() {
 
-        assertEquals("Effective Java (3rd Edition)", booksFunctions.returnTheLatestBook().getTitle());
+        assertEquals("Effective Java (3rd Edition)", booksFunctions.returnTheLatestBook().get().getTitle());
 
     }
 
     @Test
     public void getTheFirstBook() {
 
-        assertEquals("Patterns of Enterprise Application Architecture", booksFunctions.returnTheFirstBook().getTitle());
+        assertEquals("Patterns of Enterprise Application Architecture", booksFunctions.returnTheFirstBook().get().getTitle());
 
     }
 
@@ -103,7 +103,7 @@ public class BooksFunctionsTest {
     @Test
     public void findAverageOfEveryPublishedYear() {
 
-        assertEquals(12052 / 6, booksFunctions.averageYearOfPublishedBooks(), 0.7);
+        assertEquals(12052 / 6, booksFunctions.averageYearOfPublishedBooks().getAsDouble(), 0.7);
 
     }
 

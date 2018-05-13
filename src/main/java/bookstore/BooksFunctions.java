@@ -2,6 +2,8 @@ package bookstore;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
+import java.util.OptionalDouble;
 import java.util.stream.Collectors;
 
 public class BooksFunctions {
@@ -24,11 +26,9 @@ public class BooksFunctions {
 
     public List<Book> sortBookListByYear() {
 
-        List<Book> sortedBooks = books.stream()
+        return books.stream()
                 .sorted(Comparator.comparing(Book::getYear))
                 .collect(Collectors.toList());
-
-        return sortedBooks;
 
     }
 
@@ -50,30 +50,20 @@ public class BooksFunctions {
 
     }
 
-    public Book returnTheFirstBook() {
+    public Optional<Book> returnTheFirstBook() {
 
-        Book theFirst = books.stream()
-                .sorted(Comparator.comparing(Book::getYear))
-                .findFirst()
-                .get();
-
-        return theFirst;
+        return books.stream().min(Comparator.comparing(Book::getYear));
 
     }
 
-    public Book returnTheLatestBook() {
+    public Optional<Book> returnTheLatestBook() {
 
-        Book theLatest = books.stream()
-                .sorted(Comparator.comparing(Book::getYear).reversed())
-                .findFirst()
-                .get();
-
-        return theLatest;
+        return books.stream().max(Comparator.comparing(Book::getYear));
 
     }
 
     public int sumOfYears() {
-        return books.stream().mapToInt(value -> value.getYear()).sum();
+        return books.stream().mapToInt(Book::getYear).sum();
 //        int sum = 0;
 //
 //        for (int i = 0; i < books.size(); i++){
@@ -103,12 +93,10 @@ public class BooksFunctions {
         return books.size() == filteredList.size();
     }
 
-    public double averageYearOfPublishedBooks() {
+    public OptionalDouble averageYearOfPublishedBooks() {
 
-        double average = books.stream()
-                .mapToDouble(Book::getYear).average().getAsDouble();
-
-        return average;
+        return books.stream()
+                .mapToDouble(Book::getYear).average();
     }
 
     public boolean doAnyOfBooksPublishedBefore2000() {
@@ -124,16 +112,15 @@ public class BooksFunctions {
 
     public List<Book> booksStartedWithTAndPublishedAfter2009() {
 
-        List<Book> filteredBookList = books.stream()
+        return books.stream()
                 .filter(book -> book.getTitle().startsWith("T"))
                 .filter(book -> book.getYear() > 2009)
                 .collect(Collectors.toList());
 
-        return filteredBookList;
     }
 
     public List<Book> adding100YearsToAllBooks() {
-        books.stream().forEach(book -> book.setYear(book.getYear() + 100));
+        books.forEach(book -> book.setYear(book.getYear() + 100));
         return books;
 
         /*List<Book> modifiedBooks = books;
@@ -148,36 +135,37 @@ public class BooksFunctions {
 
     public List<Book> booksWithPublishedYearDivisibleBy2() {
 
-        List<Book> modifiedList = books.stream()
+        return books.stream()
                 .filter(book -> book.getYear() % 2 == 0)
                 .collect(Collectors.toList());
-
-        return modifiedList;
 
     }
 
     public List<Book> addToEveryTitleWordsFirstEdition() {
 
-        books.stream().forEach(book -> book.setTitle(book.getTitle() + " FIRST EDITION"));
+        books.forEach(book -> book.setTitle(book.getTitle() + " FIRST EDITION"));
 
         return books;
     }
 
     public List<Book> booksPublishedAfter2003() {
 
-        List<Book> filteredList = books.stream()
+        return books.stream()
                 .filter(book -> book.getYear() > 2003)
                 .collect(Collectors.toList());
-
-        return filteredList;
 
     }
 
     public static void deleteBook(String title, List<Book> bookList) {
 
-        Book bookToDelete = bookList.stream().filter(book -> book.getTitle().equals(title)).findAny().get();
-        bookList.remove(bookToDelete);
-        System.out.println("Book is deleted.\n");
+        Optional<Book> optionalBook = bookList.stream().filter(book -> book.getTitle().equals(title)).findAny();
+        if (optionalBook.isPresent()) {
+            Book bookToDelete = optionalBook.get();
+            bookList.remove(bookToDelete);
+            System.out.println("Book is deleted.\n");
+        } else {
+            System.out.println("Bad argument");
+        }
 
     }
 }
